@@ -49,7 +49,7 @@ function stopUpdating() {
 
 // Fetch real-time stock data from Alpha Vantage API
 async function fetchDataFromAlphaVantage(symbol) {
-    const apiKey = 'YOUR_API_KEY'; // Replace with your Alpha Vantage API key
+    const apiKey = 'DUIJBNMDSMEOS'; // Replace with your Alpha Vantage API key
     const apiUrl = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`;
 
     const response = await fetch(apiUrl);
