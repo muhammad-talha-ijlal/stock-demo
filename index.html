@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Stocks Dashboard</title>
+</head>
+<body>
+    <h1>Real-time Stocks Dashboard</h1>
+    <label for="symbolInput">Enter Stock Symbol:</label>
+    <input type="text" id="symbolInput" placeholder="Enter stock symbol...">
+    <button onclick="startUpdating()">Start Real-time Updates</button>
+    <button onclick="stopUpdating()">Stop Updates</button>
+    <div id="result"></div>
+    <div id="timestamp"></div>
+    <div id="errorMessage"></div>
+
+    <script>
+        let worker;
+
+        function startUpdating() {
+            const symbol = document.getElementById("symbolInput").value;
+            
+            // Create a Web Worker
+            worker = new Worker('worker.js');
+
+            // Send data to the Web Worker
+            worker.postMessage({ symbol, startUpdates: true });
+
+            // Receive processed data, timestamp, and errors from the Web Worker
+            worker.onmessage = function(event) {
+                if (event.data.error) {
+                    document.getElementById("errorMessage").innerHTML = `Error: ${event.data.error}`;
+                } else {
+                    document.getElementById("result").innerHTML = `Stock Price: ${event.data.price}`;
+                    document.getElementById("timestamp").innerHTML = `Last Updated: ${event.data.timestamp}`;
+                }
+            };
+        }
+
+        function stopUpdating() {
+            if (worker) {
+                // Send a message to the worker to stop updates
+                worker.postMessage({ stopUpdates: true });
+            }
+        }
+    </script>
+</body>
+</html>
